@@ -1,4 +1,3 @@
-import { loginAction, signupAction } from "@/app/actions";
 import { Panel, TinyBadge } from "@/components/portal-ui";
 
 export function PublicLanding() {
@@ -68,7 +67,7 @@ export function PublicLanding() {
                   Enter the email and password you created for your college account.
                 </p>
 
-                <form action={loginAction} className="mt-6 space-y-4">
+                <form action="/api/auth/login" method="post" className="mt-6 space-y-4">
                   <input
                     name="email"
                     type="email"
@@ -106,7 +105,7 @@ export function PublicLanding() {
                   from the dashboard.
                 </p>
 
-                <form action={signupAction} className="mt-6 space-y-4">
+                <form action="/api/auth/signup" method="post" className="mt-6 space-y-4">
                   <input
                     name="name"
                     placeholder="Full name"
