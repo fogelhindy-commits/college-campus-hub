@@ -1,0 +1,37 @@
+
+ ⛅️ wrangler 4.80.0
+───────────────────
+Using secrets defined in .env
+Using secrets defined in .env.local
+Your Worker has access to the following bindings:
+Binding                                                Resource                  Mode
+env.WORKER_SELF_REFERENCE (college-campus-hub)         Worker                    local [not connected]
+env.ASSETS                                             Assets                    local
+env.DATABASE_URL ("(hidden)")                          Environment Variable      local
+env.APP_SESSION_TTL_DAYS ("(hidden)")                  Environment Variable      local
+env.ZOOM_ACCOUNT_ID ("(hidden)")                       Environment Variable      local
+env.ZOOM_CLIENT_ID ("(hidden)")                        Environment Variable      local
+env.ZOOM_CLIENT_SECRET ("(hidden)")                    Environment Variable      local
+env.ZOOM_ACCESS_TOKEN ("(hidden)")                     Environment Variable      local
+env.ZOOM_HOST_EMAIL ("(hidden)")                       Environment Variable      local
+env.GOOGLE_CLIENT_ID ("(hidden)")                      Environment Variable      local
+env.GOOGLE_CLIENT_SECRET ("(hidden)")                  Environment Variable      local
+env.GOOGLE_REFRESH_TOKEN ("(hidden)")                  Environment Variable      local
+env.QUICKBOOKS_CLIENT_ID ("(hidden)")                  Environment Variable      local
+env.QUICKBOOKS_CLIENT_SECRET ("(hidden)")              Environment Variable      local
+env.QUICKBOOKS_REFRESH_TOKEN ("(hidden)")              Environment Variable      local
+env.QUICKBOOKS_REALM_ID ("(hidden)")                   Environment Variable      local
+env.QUICKBOOKS_ENVIRONMENT ("(hidden)")                Environment Variable      local
+env.QUICKBOOKS_REDIRECT_URI ("(hidden)")               Environment Variable      local
+
+
+Service bindings, Durable Object bindings, and Tail consumers connect to other Wrangler or Vite dev processes running locally, with their connection status indicated by [connected] or [not connected]. For more details, refer to https://developers.cloudflare.com/workers/runtime-apis/bindings/service-bindings/#local-development
+
+⎔ Starting local server...
+[wrangler:info] Ready on http://127.0.0.1:8787
+⎔ Reloading local server...
+⎔ Local server updated and ready
+⎔ Reloading local server...
+⎔ Local server updated and ready
+⎔ Reloading local server...
+⎔ Local server updated and ready

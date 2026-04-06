@@ -1,0 +1,22 @@
+=0 : The term '=0' is not recognized as the name of a cmdlet, function, script file, or operable program. Check the 
+spelling of the name, or if a path was included, verify that the path is correct and try again.
+At line:1 char:1
++ ='0'; ='cfat_uiq35O5VC73x4KJXJsRMmKIlewznxTrwG3aArsFc78d57280'; npx w ...
++ ~~~~
+    + CategoryInfo          : ObjectNotFound: (=0:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+ 
+=cfat_uiq35O5VC73x4KJXJsRMmKIlewznxTrwG3aArsFc78d57280 : The term 
+'=cfat_uiq35O5VC73x4KJXJsRMmKIlewznxTrwG3aArsFc78d57280' is not recognized as the name of a cmdlet, function, script 
+file, or operable program. Check the spelling of the name, or if a path was included, verify that the path is correct 
+and try again.
+At line:1 char:7
++ ='0'; ='cfat_uiq35O5VC73x4KJXJsRMmKIlewznxTrwG3aArsFc78d57280'; npx w ...
++       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (=cfat_uiq35O5VC...3aArsFc78d57280:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+ 
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mYou must be logged in to use wrangler dev in remote mode. Try logging in, or run wrangler dev --local.[0m
+
+
+🪵  Logs were written to "C:\Users\Fogal\AppData\Roaming\xdg.config\.wrangler\logs\wrangler-2026-04-06_04-30-32_087.log"

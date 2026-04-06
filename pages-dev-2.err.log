@@ -1,0 +1,21 @@
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mFailed to install `require('node:crypto').randomUUID()` extension. When using `cacheComponents` calling this function will not correctly trigger dynamic behavior.[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mFailed to install `require('node:crypto').randomBytes(size)` extension. When using `cacheComponents` calling this function without a callback argument will not correctly trigger dynamic behavior.[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mFailed to install `require('node:crypto').randomFillSync(...)` extension. When using `cacheComponents` calling this function will not correctly trigger dynamic behavior.[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mFailed to install `require('node:crypto').randomBytes(size)` extension. When using `cacheComponents` calling this function without a callback argument will not correctly trigger dynamic behavior.[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mFailed to install `require('node:crypto').generatePrimeSync(...)` extension. When using `cacheComponents` calling this function will not correctly trigger dynamic behavior.[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mFailed to install `require('node:crypto').generateKeyPairSync(...)` extension. When using `cacheComponents` calling this function will not correctly trigger dynamic behavior.[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mFailed to install `require('node:crypto').generateKeySync(...)` extension. When using `cacheComponents` calling this function will not correctly trigger dynamic behavior.[0m
+
+

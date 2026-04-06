@@ -1,0 +1,31 @@
+
+ ⛅️ wrangler 4.80.0
+───────────────────
+Support for remote bindings in `wrangler dev` is now available as a replacement for `wrangler dev --remote`. Try it out now by running `wrangler dev` with the `remote` option enabled on your resources and let us know how it goes!
+This gives you access to remote resources in development while retaining all the usual benefits of local dev: fast iteration speed, breakpoint debugging, and more.
+
+Refer to https://developers.cloudflare.com/workers/development-testing/#remote-bindings for more information.
+Using secrets defined in .env
+Using secrets defined in .env.local
+Your Worker has access to the following bindings:
+Binding                                                Resource                  
+env.WORKER_SELF_REFERENCE (college-campus-hub)         Worker                    
+env.ASSETS                                             Assets                    
+env.DATABASE_URL ("(hidden)")                          Environment Variable      
+env.APP_SESSION_TTL_DAYS ("(hidden)")                  Environment Variable      
+env.ZOOM_ACCOUNT_ID ("(hidden)")                       Environment Variable      
+env.ZOOM_CLIENT_ID ("(hidden)")                        Environment Variable      
+env.ZOOM_CLIENT_SECRET ("(hidden)")                    Environment Variable      
+env.ZOOM_ACCESS_TOKEN ("(hidden)")                     Environment Variable      
+env.ZOOM_HOST_EMAIL ("(hidden)")                       Environment Variable      
+env.GOOGLE_CLIENT_ID ("(hidden)")                      Environment Variable      
+env.GOOGLE_CLIENT_SECRET ("(hidden)")                  Environment Variable      
+env.GOOGLE_REFRESH_TOKEN ("(hidden)")                  Environment Variable      
+env.QUICKBOOKS_CLIENT_ID ("(hidden)")                  Environment Variable      
+env.QUICKBOOKS_CLIENT_SECRET ("(hidden)")              Environment Variable      
+env.QUICKBOOKS_REFRESH_TOKEN ("(hidden)")              Environment Variable      
+env.QUICKBOOKS_REALM_ID ("(hidden)")                   Environment Variable      
+env.QUICKBOOKS_ENVIRONMENT ("(hidden)")                Environment Variable      
+env.QUICKBOOKS_REDIRECT_URI ("(hidden)")               Environment Variable      
+
+
