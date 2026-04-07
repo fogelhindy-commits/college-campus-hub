@@ -18,6 +18,8 @@
 /out/
 /.open-next/
 /.wrangler/
+/pages-dist/
+wrangler.toml
 
 # production
 /build

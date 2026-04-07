@@ -1,4 +1,4 @@
-name: Deploy to Cloudflare
+name: Deploy to Cloudflare Pages
 
 on:
   push:
@@ -25,10 +25,10 @@ jobs:
         run: npm ci
 
       - name: Build for Cloudflare
-        run: npm run cf:build
+        run: npm run pages:build
 
-      - name: Publish to Cloudflare Workers
-        run: npx opennextjs-cloudflare deploy
+      - name: Publish to Cloudflare Pages
+        run: npx wrangler pages deploy ./pages-dist --project-name hii-pages --branch main --commit-dirty
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
