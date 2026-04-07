@@ -27,6 +27,12 @@ const turbopackRuntimePath = path.join(
   "ssr",
   "[turbopack]_runtime.js",
 );
+const nonSsrTurbopackRuntimePath = path.join(
+  serverNextDir,
+  "server",
+  "chunks",
+  "[turbopack]_runtime.js",
+);
 const baseServerPath = path.join(
   serverDir,
   "node_modules",
@@ -35,6 +41,23 @@ const baseServerPath = path.join(
   "server",
   "base-server.js",
 );
+const handlerPath = path.join(serverDir, "handler.mjs");
+const ssrChunkDir = path.join(serverNextDir, "server", "chunks", "ssr");
+
+function buildStaticRequireSwitch() {
+  const cases = [];
+  if (fs.existsSync(ssrChunkDir)) {
+    for (const file of fs.readdirSync(ssrChunkDir)) {
+      if (!file.endsWith(".js")) continue;
+      cases.push(
+        `    case "server/chunks/ssr/${file}":\n      return require("./${file}");`,
+      );
+    }
+  }
+  return `function requireChunk(chunkPath) {\n    switch (chunkPath) {\n${cases.join(
+    "\n",
+  )}\n      default:\n        throw new Error(\`Not found \${chunkPath}\`);\n    }\n  }`;
+}
 
 const source = fs.readFileSync(indexPath, "utf8");
 const patched = source
@@ -60,7 +83,7 @@ const patched = source
   )
   .replace(
     /function requireChunk\(chunkPath\) \{\s*switch\(chunkPath\) \{\s*default:\s*throw new Error\(`Not found \$\{chunkPath\}`\);\s*\}\s*\}/s,
-    'function requireChunk(chunkPath) {\n    return require(path.resolve(RUNTIME_ROOT, chunkPath));\n  }',
+    buildStaticRequireSwitch(),
   );
 
 if (patched === source) {
@@ -78,16 +101,17 @@ if (fs.existsSync(composableCacheSource)) {
   fs.copyFileSync(composableCacheSource, composableCacheTarget);
 }
 
-if (fs.existsSync(turbopackRuntimePath)) {
-  const runtimeSource = fs.readFileSync(turbopackRuntimePath, "utf8");
+for (const runtimePath of [turbopackRuntimePath, nonSsrTurbopackRuntimePath]) {
+  if (!fs.existsSync(runtimePath)) continue;
+  const runtimeSource = fs.readFileSync(runtimePath, "utf8");
   const runtimePatched = runtimeSource.replace(
     /function requireChunk\(chunkPath\) \{\s*switch\(chunkPath\) \{\s*default:\s*throw new Error\(`Not found \$\{chunkPath\}`\);\s*\}\s*\}/s,
-    'function requireChunk(chunkPath) {\n    return require(path.resolve(RUNTIME_ROOT, chunkPath));\n  }',
+    buildStaticRequireSwitch(),
   );
 
   if (runtimePatched !== runtimeSource) {
-    fs.writeFileSync(turbopackRuntimePath, runtimePatched);
-    console.log("Patched Turbopack runtime chunk loader.");
+    fs.writeFileSync(runtimePath, runtimePatched);
+    console.log(`Patched Turbopack runtime chunk loader: ${path.relative(root, runtimePath)}`);
   }
 }
 
@@ -101,5 +125,18 @@ if (fs.existsSync(baseServerPath)) {
   if (baseServerPatched !== baseServerSource) {
     fs.writeFileSync(baseServerPath, baseServerPatched);
     console.log("Patched Next base-server component handler normalization.");
+  }
+}
+
+if (fs.existsSync(handlerPath)) {
+  const handlerSource = fs.readFileSync(handlerPath, "utf8");
+  const handlerPatched = handlerSource.replace(
+    'await components.ComponentMod.handler(handlerReq, handlerRes, {\n      waitUntil: this.getWaitUntil(),\n    });',
+    'const componentMod = typeof components.ComponentMod?.handler === "function"\n      ? components.ComponentMod\n      : components.ComponentMod?.default ?? components.ComponentMod;\n    const componentHandler = typeof componentMod?.handler === "function"\n      ? componentMod.handler\n      : typeof componentMod?.default?.handler === "function"\n        ? componentMod.default.handler\n        : typeof componentMod?.default === "function"\n          ? componentMod.default\n          : typeof componentMod === "function"\n            ? componentMod\n            : null;\n    if (typeof componentHandler !== "function") {\n      throw new Error(`Invalid component handler for ${components.page ?? "unknown page"}`);\n    }\n    await componentHandler(handlerReq, handlerRes, {\n      waitUntil: this.getWaitUntil(),\n    });',
+  );
+
+  if (handlerPatched !== handlerSource) {
+    fs.writeFileSync(handlerPath, handlerPatched);
+    console.log("Patched OpenNext handler component normalization.");
   }
 }
