@@ -4,12 +4,12 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build --webpack",
     "start": "next start",
     "lint": "eslint",
     "postinstall": "node ./scripts/prisma-generate.mjs",
     "seed": "prisma db seed",
-    "cf:build": "node ./scripts/patch-opennext-copy.mjs && opennextjs-cloudflare build && node ./scripts/patch-opennext-runtime.mjs",
+    "cf:build": "node ./scripts/patch-opennext-copy.mjs && opennextjs-cloudflare build && node ./scripts/patch-opennext-copy.mjs && node ./scripts/patch-opennext-runtime.mjs",
     "cf:preview": "npm run cf:build && wrangler dev",
     "cf:deploy": "npm run cf:build && opennextjs-cloudflare deploy",
     "pages:build": "npm run cf:build && node ./scripts/assemble-pages-dist.mjs"
