@@ -16,23 +16,18 @@ if (!fs.existsSync(indexPath)) {
 
 const serverDir = path.dirname(indexPath);
 const serverNextDir = path.join(serverDir, ".next");
+const pagesDistServerNextDir = path.join(
+  root,
+  "pages-dist",
+  "server-functions",
+  "default",
+  ".next",
+);
 const cacheSource = path.join(serverDir, "cache.cjs");
 const composableCacheSource = path.join(serverDir, "composable-cache.cjs");
 const cacheTarget = path.join(serverNextDir, "cache.cjs");
 const composableCacheTarget = path.join(serverNextDir, "composable-cache.cjs");
-const turbopackRuntimePath = path.join(
-  serverNextDir,
-  "server",
-  "chunks",
-  "ssr",
-  "[turbopack]_runtime.js",
-);
-const nonSsrTurbopackRuntimePath = path.join(
-  serverNextDir,
-  "server",
-  "chunks",
-  "[turbopack]_runtime.js",
-);
+const runtimeRoots = [serverNextDir, pagesDistServerNextDir];
 const baseServerPath = path.join(
   serverDir,
   "node_modules",
@@ -46,12 +41,16 @@ const ssrChunkDir = path.join(serverNextDir, "server", "chunks", "ssr");
 
 function buildStaticRequireSwitch() {
   const cases = [];
-  if (fs.existsSync(ssrChunkDir)) {
-    for (const file of fs.readdirSync(ssrChunkDir)) {
+  const seen = new Set();
+  for (const runtimeRoot of runtimeRoots) {
+    const chunkDir = path.join(runtimeRoot, "server", "chunks", "ssr");
+    if (!fs.existsSync(chunkDir)) continue;
+    for (const file of fs.readdirSync(chunkDir)) {
       if (!file.endsWith(".js")) continue;
-      cases.push(
-        `    case "server/chunks/ssr/${file}":\n      return require("./${file}");`,
-      );
+      const key = `server/chunks/ssr/${file}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      cases.push(`    case "${key}":\n      return require("./${file}");`);
     }
   }
   return `function requireChunk(chunkPath) {\n    switch (chunkPath) {\n${cases.join(
@@ -101,17 +100,22 @@ if (fs.existsSync(composableCacheSource)) {
   fs.copyFileSync(composableCacheSource, composableCacheTarget);
 }
 
-for (const runtimePath of [turbopackRuntimePath, nonSsrTurbopackRuntimePath]) {
-  if (!fs.existsSync(runtimePath)) continue;
-  const runtimeSource = fs.readFileSync(runtimePath, "utf8");
-  const runtimePatched = runtimeSource.replace(
-    /function requireChunk\(chunkPath\) \{\s*switch\(chunkPath\) \{\s*default:\s*throw new Error\(`Not found \$\{chunkPath\}`\);\s*\}\s*\}/s,
-    buildStaticRequireSwitch(),
-  );
+for (const runtimeRoot of runtimeRoots) {
+  for (const runtimePath of [
+    path.join(runtimeRoot, "server", "chunks", "ssr", "[turbopack]_runtime.js"),
+    path.join(runtimeRoot, "server", "chunks", "[turbopack]_runtime.js"),
+  ]) {
+    if (!fs.existsSync(runtimePath)) continue;
+    const runtimeSource = fs.readFileSync(runtimePath, "utf8");
+    const runtimePatched = runtimeSource.replace(
+      /function requireChunk\(chunkPath\) \{\s*switch\(chunkPath\) \{\s*default:\s*throw new Error\(`Not found \$\{chunkPath\}`\);\s*\}\s*\}/s,
+      buildStaticRequireSwitch(),
+    );
 
-  if (runtimePatched !== runtimeSource) {
-    fs.writeFileSync(runtimePath, runtimePatched);
-    console.log(`Patched Turbopack runtime chunk loader: ${path.relative(root, runtimePath)}`);
+    if (runtimePatched !== runtimeSource) {
+      fs.writeFileSync(runtimePath, runtimePatched);
+      console.log(`Patched Turbopack runtime chunk loader: ${path.relative(root, runtimePath)}`);
+    }
   }
 }
 
